@@ -38,19 +38,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         NSURLConnection.sendAsynchronousRequest(request, queue:  NSOperationQueue.mainQueue()) { (response: NSURLResponse!, data: NSData!, error: NSError!) ->
             Void in
             
+
             if (error != nil) {
-                self.networkErrorLabel.hidden = true
+                self.networkErrorLabel.hidden = false
             } else {
                 let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
                 if let json = json {
                     self.movies = json["movies"] as! [NSDictionary]
                     self.tableView.reloadData()
                 }
+                self.networkErrorLabel.hidden = true
             }
             self.activityIndicatorView.stopAnimating()
 
         }
-x
+        
+        tableView.delegate = self
+        tableView.dataSource = self
+ 
         // Do any additional setup after loading the view.
     }
 
@@ -93,13 +98,14 @@ x
             Void in
             
             if (error != nil) {
-                self.networkErrorLabel.hidden = true
+                self.networkErrorLabel.hidden = false
             } else {
                 let json = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as? NSDictionary
                 if let json = json {
                     self.movies = json["movies"] as! [NSDictionary]
                     self.tableView.reloadData()
                 }
+                self.networkErrorLabel.hidden = true
             }
             self.refreshControl.endRefreshing()
             
